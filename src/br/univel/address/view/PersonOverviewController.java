@@ -2,6 +2,7 @@ package br.univel.address.view;
 
 import br.univel.address.MainApp;
 import br.univel.address.model.Person;
+import br.univel.address.util.DateUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -46,5 +47,23 @@ public class PersonOverviewController {
         this.mainApp = mainApp;
 
         personTable.setItems(mainApp.getPersonData());
+    }
+
+    public void showPersonDetails(Person person) {
+        if (person != null) {
+            firstNameLabel.setText(person.getFirstName());
+            lastNameLabel.setText(person.getLastName());
+            streetLabel.setText(person.getStreet());
+            postalCodeLabel.setText(Integer.toString(person.getPostalCode()));
+            cityLabel.setText(person.getCity());
+            birthdayLabel.setText(DateUtil.format(person.getBirthday()));
+        } else {
+            firstNameLabel.setText("");
+            lastNameLabel.setText("");
+            streetLabel.setText("");
+            postalCodeLabel.setText("");
+            cityLabel.setText("");
+            birthdayLabel.setText("");
+        }
     }
 }
