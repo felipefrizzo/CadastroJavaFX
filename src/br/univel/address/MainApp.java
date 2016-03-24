@@ -1,6 +1,10 @@
 package br.univel.address;
 
+import br.univel.address.model.Person;
+import br.univel.address.view.PersonOverviewController;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -12,6 +16,24 @@ import java.io.IOException;
 public class MainApp extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
+
+    private ObservableList<Person> personData = FXCollections.observableArrayList();
+
+    public MainApp() {
+        personData.add(new Person("João", "Muster"));
+        personData.add(new Person("Amanda", "Mueller"));
+        personData.add(new Person("Fernando", "Kurz"));
+        personData.add(new Person("Henrique", "Meier"));
+        personData.add(new Person("Ana", "Meyer"));
+        personData.add(new Person("Lidia", "Kunz"));
+        personData.add(new Person("Stefani", "Best"));
+        personData.add(new Person("Fabi", "Meier"));
+        personData.add(new Person("Mari", "Mueller"));
+    }
+
+    public ObservableList<Person> getPersonData() {
+        return personData;
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -43,6 +65,8 @@ public class MainApp extends Application {
             AnchorPane personOverview = (AnchorPane) loader.load();
 
             rootLayout.setCenter(personOverview);
+            PersonOverviewController controller = loader.getController();
+            controller.setMainApp(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
