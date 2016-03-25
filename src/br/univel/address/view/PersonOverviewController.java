@@ -4,6 +4,7 @@ import br.univel.address.MainApp;
 import br.univel.address.model.Person;
 import br.univel.address.util.DateUtil;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -76,7 +77,15 @@ public class PersonOverviewController {
     @FXML
     private void handleDeletePerson() {
         int selectedIndex = personTable.getSelectionModel().getSelectedIndex();
-        personTable.getItems().remove(selectedIndex);
+        if (selectedIndex >= 0) {
+            personTable.getItems().remove(selectedIndex);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Nenhuma seleção");
+            alert.setHeaderText("Nenhuma Pessoa Selecionada");
+            alert.setContentText("Por favor, selecione uma pessoa na tabela");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -98,11 +107,12 @@ public class PersonOverviewController {
             }
 
         } else {
-            Dialogs.create()
-                    .title("Nenhuma seleção")
-                    .masthead("Nenhuma Pessoa Selecionada")
-                    .message("Por favor, selecione uma pessoa na tabela.")
-                    .showWarning();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Nenhuma seleção");
+            alert.setHeaderText("Nenhuma Pessoa Selecionada.");
+            alert.setContentText("Por favor, selecione uma pessoa na tabela.");
+
+            alert.showAndWait();
         }
 
     }

@@ -2,6 +2,7 @@ package br.univel.address;
 
 import br.univel.address.model.Person;
 import br.univel.address.model.PersonListWrapper;
+import br.univel.address.view.BirthdayStatisticsController;
 import br.univel.address.view.PersonEditDialogController;
 import br.univel.address.view.PersonOverviewController;
 import br.univel.address.view.RootLayoutController;
@@ -10,12 +11,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.controlsfx.dialog.Dialogs;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -97,7 +98,7 @@ public class MainApp extends Application {
     public boolean showPersonEditDialog(Person person) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/PersonEditDialog.fxml"));
+            loader.setLocation(MainApp.class.getResource("view/PersonEditDialogs.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
 
             Stage dialogStage = new Stage();
@@ -117,6 +118,31 @@ public class MainApp extends Application {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void showBirthdayStatistics() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/BirthdayStatistics.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+
+            Stage dialogStage = new Stage();
+
+            dialogStage.setTitle("Birthday Statistics");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+
+            Scene scene = new Scene(page);
+
+            dialogStage.setScene(scene);
+
+            BirthdayStatisticsController controller = loader.getController();
+            controller.setPersonData(personData);
+
+            dialogStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -149,8 +175,7 @@ public class MainApp extends Application {
 
     public void loadPersonDataFromFile(File file) {
         try {
-            JAXBContext context = JAXBContext
-                    .newInstance(PersonListWrapper.class);
+            JAXBContext context = JAXBContext.newInstance(PersonListWrapper.class);
             Unmarshaller um = context.createUnmarshaller();
 
             PersonListWrapper wrapper = (PersonListWrapper) um.unmarshal(file);
@@ -161,10 +186,11 @@ public class MainApp extends Application {
             setPersonFilePath(file);
 
         } catch (Exception e) {
-            Dialogs.create()
-                    .title("Erro")
-                    .masthead("Não foi possível carregar dados do arquivo:\n"
-                    + file.getPath()).showException(e);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setContentText("Não foi possível salvar os dados do arquivo:\n" + file.getPath());
+
+            alert.showAndWait();
         }
     }
 
@@ -182,9 +208,11 @@ public class MainApp extends Application {
 
             setPersonFilePath(file);
         } catch (Exception e) {
-            Dialogs.create().title("Erro")
-                            .masthead("Não foi possível salvar os dados do arquivo:\n"
-                            + file.getPath()).showException(e);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setContentText("Não foi possível salvar os dados do arquivo:\n" + file.getPath());
+
+            alert.showAndWait();
         }
     }
 
